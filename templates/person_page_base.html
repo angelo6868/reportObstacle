@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet"href="/statics/css/theme.css" type="text/css"charset="UTF-8"/>
+    <style>
+
+    </style>
+</head>
+<body>
+<div>
+    <div class="div_header">
+        <div class="title_header"><h1>{{ username }}</h1></div>
+        <div class="navigation_header log-off"><a  href="#">注销</a></div>
+        <div class="navigation_header"><a  href="/{{ username }}/manage_edit-0-0/">管理</a></div>
+        <div class="navigation_header"><a  href="/{{ username }}.html/">个人首页</a></div>
+        <div class="navigation_header"><a  href="/homepage/">博客首页</a></div>
+    </div>
+    <div class="div_content">
+        <div class="div_left">
+            <div><h2>公告</h2></div>
+            <ul>
+                <li>昵称：{{ username }}</li>
+                <li>关注：{{ care }}</li>
+                <li>粉丝：{{ fans }}</li>
+            </ul>
+            <div><h2>标签</h2></div>
+            {% for item in tag %}
+                <ul>
+                    <li>
+                        <a href="/{{ username }}/tag/{{ item.id }}.html">{{ item.caption }}</a>
+                        ({{ item.article_set.count }})
+                    </li>
+                </ul>
+            {% endfor %}
+
+            <div><h2>分类</h2></div>
+            {% for item in classification %}
+                <ul>
+                    <li>
+                        <a href="/{{ username }}/classification/{{ item.id }}.html">{{ item.caption }}({{ item.article_set.count }})</a>
+                    </li>
+                </ul>
+            {% endfor %}
+            <div><h2>时间</h2></div>
+            {% for item in ctime_list %}
+                <ul>
+                    <li>
+                        <a href="/{{ username }}/ctime/{{ item.ctime }}.html">{{ item.ctime }}({{ item.c_d }})</a>
+                    </li>
+                </ul>
+            {% endfor %}
+        </div>
+        <div class="div_right">
+            {% block right %}
+            {% endblock %}
+        </div>
+    </div>
+</div>
+<script src="/statics/js/jquery-3.3.1.js"></script>
+<script>
+    $(".log-off").click(function () {
+        $.ajax({
+            url:"/logoff/",
+            success:function (arg) {
+                if (arg == "ok"){
+                    alert("注销成功！")
+                }
+            }
+        })
+    })
+</script>
+</body>
+</html>

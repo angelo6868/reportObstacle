@@ -1,0 +1,13 @@
+{% extends "manage_edit_base.html" %}
+{% block css %}{% endblock %}
+{% block contents %}
+    <form action="/{{ username }}/backend/add-classification/" method="post">
+        {% csrf_token %}
+        <div>
+            <label class="required" for="id_title">分类名:</label>
+            <input type="text" name="caption">
+        </div>
+        <input type="submit" value="保存">
+    </form>
+{% endblock %}
+{% block js %}{% endblock %}

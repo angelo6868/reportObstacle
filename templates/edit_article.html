@@ -1,0 +1,66 @@
+{% extends "manage_edit_base.html" %}
+{% block css %}
+    <style>
+    .list-group-item{
+        display: inline;
+    }
+    .item-article-choose{
+        margin-top: 20px;
+    }
+    .item-submit{
+        padding: 8px;
+        margin-right: 100px;
+    }
+    </style>
+{% endblock %}
+{% block contents %}
+    <form  action="/backend/edit-article-{{ article_obj.id }}.html/" method="post">
+    {% csrf_token %}
+            <div >
+                <label class="required" for="id_title">文章标题:</label>
+                <input type="text" name="article_title" class="form-control"value="{{ article_obj.title }}">
+            </div>
+            <div >
+                <label class="required" for="id_title">文章详细内容：</label>
+                <textarea class="form-control" id="content" name="article_content">{{ article_obj.article_detail.detail }}</textarea>
+            </div>
+            <div class="item-article-choose">
+            <ul class="list-group">
+                <lable class="radio-inline">文章标签:</lable>
+                {% for item in tag %}
+                    <li class="list-group-item"><input type="radio" name="inlineRadioOptions1" id="inlineRadio1" value="{{ item.id }}"> {{ item.caption }}</li>
+                {% endfor %}
+            </ul>
+            </div>
+            <div class="item-article-choose">
+                <ul class="list-group">
+                <lable class="radio-inline">文章分类:</lable>
+                {% for item in classification %}
+                    <li class="list-group-item"><input type="radio" name="inlineRadioOptions2" id="inlineRadio2" value="{{ item.id }}"> {{ item.caption }}</li>
+                {% endfor %}
+                </ul>
+            </div>
+            <div class="item-submit">
+                <input type="submit" value="保存" class="right btn"/>
+            </div>
+    </form>
+{% endblock %}
+{% block js %}
+    <script src="/statics/plugs/kindeditor-4.1.11/kindeditor/kindeditor-all-min.js"></script>
+    <script src="/statics/js/jquery-3.3.1.js"></script>
+    <script>
+        $(function () {
+            kindeditorinit();
+        });
+        function kindeditorinit() {
+            kind = KindEditor.create('#content', {
+                width: '100%',       // 文本框宽度(可以百分比或像素)
+                height: '300px',     // 文本框高度(只能像素)
+                minWidth: 200,       // 最小宽度（数字）
+                minHeight: 400,      // 最小高度（数字）
+                resizeType:0,       //不允许在任何方向上拉动文本框
+                uploadJson:"/pictures/{{ username }}/"
+            });
+        }
+    </script>
+{% endblock %}

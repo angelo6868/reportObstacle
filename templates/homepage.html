@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/statics/plugs/bootstrap-3.3.7-dist/css/bootstrap.css">
+    <link rel="stylesheet" href="/statics/plugs/font-awesome-4.7.0/css/font-awesome.css">
+    <style>
+        .content_front{
+            height: 50px;
+            background-color: #28d2c1;
+            min-width: 1100px;
+        }
+        .left{
+            float: left;
+        }
+        .right{
+            float: right;
+        }
+        .div_outer{
+            min-width: 1100px;
+        }
+        .div_a{
+            width: 15%;
+            float: left;
+        }
+        .div_b{
+            width: 60%;
+            float: left;
+        }
+        .div_c{
+            width: 20%;
+            float: left;
+        }
+        .content_header{
+            background-color: bisque;
+            height: 50px;
+            line-height: 50px;
+            border: solid darkslateblue 1px;
+        }
+        .content_head_in{
+            margin: 0px 80px;
+        }
+        .header_inner{
+            margin: 0px 20px;
+        }
+        .content_article{
+            float: left;
+        }
+        .content_front .front_icon{
+            width: 15%;
+            background-color: #2e6da4;
+            height: 50px;
+        }
+        .content_front .front_icon img{
+            margin: 0 auto;
+        }
+        .content_front .front_icon{
+            height: 50px;
+            line-height: 50px;
+            text-align: center;
+        }
+        .content_front .front_operate a{
+            height: 50px;
+            line-height: 50px;
+            margin-right: 20px;
+            color: white;
+        }
+        .div_b .content_article{
+            width: 100%;
+        }
+        .post-item{
+            border: 1px dashed lightgray;
+            margin-top: 3px;
+            font-size: 15px;
+        }
+        .article_comment {
+    padding-left: 18px;
+    padding-right: 5px;
+    margin-left: 1px;
+}
+        .item-box{
+            border: 1px solid gray;
+            margin: 5px;
+            text-align: center;
+        }
+        .user-item:hover{
+            background-color: #dddddd;
+        }
+        .div_outer .div_a .item-head{
+            font-size: 20px;
+            background-color: #ab9bd2;
+        }
+        .front_operate .front_operate_item{
+            font-size: 23px;
+            padding: 0 10px;
+            display: inline-block;
+        }
+        .front_operate .front_operate_item:hover{
+            background-color: #2aabd2;
+        }
+    </style>
+</head>
+<body>
+<h1>
+    博客首页
+</h1>
+<div class="content_front">
+    <div class="front_icon left"><img src="/statics/icon/blog.jpg" alt=""style="width: 50px;height: 50px"></div>
+    <div class="front_operate right">
+        <a href="/login/" class="front_operate_item">登录</a>
+        <a href="/register/"class="front_operate_item">注册</a>
+    </div>
+</div>
+<div class="div_outer">
+    <div class="div_a">
+        <div class="item-box">
+            <div class="item-head">网站分类</div>
+            <ul class="list-group">
+                <li class="list-group-item"></li>
+            </ul>
+        </div>
+        <div class="item-box">
+            <div class="item-head">推荐博客排行</div>
+            <ul class="list-group">
+                {% for item in user %}
+                    <li class="list-group-item user-item">
+                        <a href="">{{ item.username }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div class="div_b">
+        <div class="content_header">
+            <div class="content_head_in">
+                <a class="header_inner" href="/homepage/0.html/">全部</a>
+                {% for item in classification %}
+                    <a class="header_inner" href="/homepage/{{ item.id }}.html/">{{ item.caption }}</a>
+                {% endfor %}
+            </div>
+        </div>
+        <div>
+            {% for item in article %}
+                <div class="post-item">
+                    <h3><a href="/{{ item.user.user.username }}/{{ item.id }}.html/"target="_blank"style="display: block">{{ item.title}}</a></h3>
+                    <div class="content_article">
+                        <a class="left" href="/{{ item.user.user.username }}/{{ item.id }}.html/"style="display: block"><img src="/{{ item.user.user.img }}" alt="" style="width: 50px;height: 50px;"></a>
+                        {{ item.summary }}
+                    </div>
+                <div style="font-size: 19px;margin: 3px">
+                    <div class="post_item_foot">
+                        <a href="/{{ item.user.user.username }}/{{ item.id }}.html/"target="_blank" class="lightblue">{{ item.user.user.username }}</a>
+                        发布于 2018-09-28 12:01
+                        <span class="article_comment">
+                            <a href="/{{ item.user.user.username }}/{{ item.id }}.html/">
+                                <i class="fa fa-commenting-o" aria-hidden="true"></i>
+                                评论({{ item.comment_count }})</a>
+                        </span>
+                        <span class="article_view">
+                            <a href="/{{ item.user.user.username }}/{{ item.id }}.html/">
+                                <i class="fa fa-share" aria-hidden="true"></i>
+                            阅读({{ item.read_count }})</a>
+                        </span>
+                    </div>
+                </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="div_c">
+        <div>广告位</div>
+    </div>
+</div>
+
+</body>
+</html>

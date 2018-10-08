@@ -1,0 +1,42 @@
+{% extends "manage_edit_base.html" %}
+{% block css %}
+    <style>
+    .item-submit{
+        padding: 8px;
+        margin-right: 100px;
+    }
+    .content-box{
+        margin: 0px 50px;
+    }
+    .item-content{
+        margin: 30px 0px;
+    }
+    </style>
+{% endblock %}
+{% block contents %}
+    <div class="content-box">
+        <form>
+            {% csrf_token %}
+            <div class="item-content">
+                <label class="required" for="id_title">报障标题:</label>
+                <input type="text" name="obstacle_title" class="form-control"value="{{ user_obstacle_obj.title }}"disabled>
+            </div>
+            <div class="item-content">
+                <label class="required" for="id_title">报障详细内容：</label>
+                <textarea class="form-control" id="content" name="obstacle_content"disabled>{{ user_obstacle_obj.content }}</textarea>
+            </div>
+            {% if user_obstacle_obj.status == 3 %}
+                <div class="item-content">
+                    <label class="required" for="id_title">报障解决方案：</label>
+                    <textarea class="form-control" id="content" name="obstacle_content"disabled>{{ user_obstacle_obj.solution }}</textarea>
+                </div>
+            {% endif %}
+        </form>
+    </div>
+{% endblock %}
+{% block js %}
+    <script src="/statics/plugs/kindeditor-4.1.11/kindeditor/kindeditor-all-min.js"></script>
+    <script src="/statics/js/jquery-3.3.1.js"></script>
+    <script>
+    </script>
+{% endblock %}

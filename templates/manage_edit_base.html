@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/statics/plugs/bootstrap-3.3.7-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/statics/plugs/font-awesome-4.7.0/css/font-awesome.css">
+    {#需要加上charset="UTF-8"#}
+    <link rel="stylesheet" href="/statics/css/manage_page.css" type="text/css"charset="UTF-8">
+    {% block css %}{% endblock %}
+    <style>
+{#        之前没有对外面的容器进行设置，直接设置里面的容器，这样里面的容器变大会导致把外面的容器也撑大#}
+{#          设置绝对定位后，位置会固定下来#}
+        .Page-body{
+            position: absolute;
+            top: 52px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+        .Page-body .menus-left{
+            background-color: #dddddd;
+            width: 200px;
+            position: absolute;
+            top: 2px;
+            bottom: 0px;
+            left: 0px;
+        }
+        .Page-body .contents-right{
+            position: absolute;
+            top: 2px;
+            right: 0px;
+            left: 208px;
+            bottom: 0;
+            overflow:scroll;
+        }
+        .Page-body .menus-left .menu-item{
+            display: block;
+        }
+    </style>
+</head>
+<body>
+<div class="Page-header">
+    <div class="Page-log left">个人博客后台管理</div>
+    <div class="header-left-menus left">
+        <a class="item-a left" href="/homepage/">博客首页</a>
+        <a class="item-a left" href="/{{ user_obj.username }}.html/">个人博客主页</a>
+    </div>
+    <div class="header-right-menus right">
+        <div class="left">
+            <span>
+                <a class="item-a " href="">
+                    <i class="fa fa-comments-o" aria-hidden="true"></i>(0)
+                    消息</a>
+            </span>
+            <span>
+                <a class="item-a " href="">
+                    <i class="fa fa-bell" aria-hidden="true"></i>(0)
+                    通知</a>
+            </span>
+            <span>
+                <a class="item-a " href="">
+                    <i class="fa fa-tasks" aria-hidden="true"></i>(0)
+                    任务</a>
+            </span>
+        </div>
+        <div class="item-a-list right">
+            <a class="item-a right" href="">
+                <img class="item-img" src="/{{ user_obj.img }}" alt="">
+            </a>
+            <div class="menu-list2 right list-group">
+                <a  class="list-group-item" href="">个人信息</a>
+                <a  class="list-group-item" href="">注销</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="Page-body">
+    <div class="menus-left list-group">
+        <a class="menu-item list-group-item" href="/{{ user_obj.username }}/manage_edit-0-0/">
+            <i class="fa fa-cogs" aria-hidden="true"></i>
+            <span>文章管理</span>
+        </a>
+        <a class="menu-item list-group-item" href="/{{ user_obj.username }}/manage_tag/">
+            <i class="fa fa-cogs" aria-hidden="true"></i>
+            <span>标签管理</span>
+        </a>
+        <a class="menu-item list-group-item" href="/{{ user_obj.username }}/manage_classification/">
+            <i class="fa fa-cogs" aria-hidden="true"></i>
+            <span>分类管理</span>
+        </a>
+        <a class="menu-item list-group-item" href="/{{ user_obj.username }}/manage_user_info/">
+            <i class="fa fa-cogs" aria-hidden="true"></i>
+            <span>个人信息管理</span>
+        </a>
+        <a class="menu-item list-group-item" href="/{{ user_obj.username }}/manage_user_obstacle-0/">
+            <i class="fa fa-cogs" aria-hidden="true"></i>
+            <span>报障管理</span>
+        </a>
+        <a class="menu-item list-group-item" href="/backend/handel_user_obstacle-0/">
+            <i class="fa fa-cogs" aria-hidden="true"></i>
+            <span>报障处理</span>
+        </a>
+    </div>
+    <div class="contents-right">
+        {% block contents %}{% endblock %}
+    </div>
+</div>
+<div class="Page-bottom"></div>
+<script src="/statics/js/jquery-3.3.1.js"></script>
+<script>
+    $("#title1").click(function () {
+        $("#option-menu1").removeClass("hide");
+        $("#option-menu2").addClass("hide");
+        $("#option-menu3").addClass("hide");
+    })
+    $("#title2").click(function () {
+        $("#option-menu2").removeClass("hide");
+        $("#option-menu1").addClass("hide");
+        $("#option-menu3").addClass("hide");
+    })
+    $("#title3").click(function () {
+        $("#option-menu3").removeClass("hide");
+        $("#option-menu2").addClass("hide");
+        $("#option-menu1").addClass("hide");
+    })
+</script>
+{% block js %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,11 @@
+{% extends "person_page_base.html" %}
+{% block right %}
+    <div>
+        {% for item in obj %}
+            <a href="/{{ username }}/{{ item.id }}.html/">
+                {{ item.title }}
+                <p>{{ item.summary }}</p>
+            </a>
+        {% endfor %}
+    </div>
+{% endblock %}

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    var a="hello";
+    var b= new String("hello");
+    console.log(typeof a);
+    console.log(typeof b);
+    console.log(a.length);
+    console.log(a.anchor());
+    console.log(a.bold());
+    console.log(a.italics());
+    console.log(a.toUpperCase());//转换为大写
+    console.log(a.toLowerCase());//转换为小写
+    console.log(a.charAt(1));
+    console.log(a.charCodeAt(1));
+    console.log(a.indexOf("e"));//获取下标
+    console.log(a.lastIndexOf("e"));
+    a.concat("abc");
+    console.log(a);
+    var c = a +"abc";
+    console.log(a);
+    console.log(c);
+    console.log(a.substr(1,2));
+    console.log(a.substring(1,4));
+    console.log(a.slice(-3,-1));
+    console.log(a.slice(0,3));
+    d = a.replace("hell","haha");
+    console.log(d);
+    var x = "1,2,3,4,5,6";
+    var y = x.split(",");
+    console.log(x);
+    console.log(y);
+</script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+{% extends "manage_edit_base.html" %}
+{% block css %}
+    <style>
+    .content-box{
+        margin: 0px 50px;
+    }
+    .item-content{
+        margin: 30px 0px;
+    }
+    .item-button{
+        display: inline-block;
+        width: 50px;
+        height: 30px;
+        border: 1px dashed lightgray;
+        line-height: 30px;
+        text-align: center;
+        background-color: #dddddd;
+        padding: 0 5px;
+        margin: 0 8px;
+    }
+    </style>
+{% endblock %}
+{% block contents %}
+    <div class="content-box">
+        <form method="post"action="/backend/handel-solution-obstacle-{{ nid }}.html/">
+            {% csrf_token %}
+            <div class="item-content">
+                <label class="required" for="id_title">报障标题:</label>
+                <input type="text" name="obstacle_title" class="form-control"value="{{ user_obstacle_obj.title }}"disabled>
+            </div>
+            <div class="item-content">
+                <label class="required" for="id_title">报障详细内容：</label>
+                <textarea class="form-control" id="content" name="obstacle_content"disabled>{{ user_obstacle_obj.content }}</textarea>
+            </div>
+            <div class="item-content">
+                <label class="required" for="id_title">解决方案</label>
+                <textarea class="form-control" id="solution" name="obstacle_solution"></textarea>
+            </div>
+            <div class="item-content">
+                <label class="required" for="id_title"></label>
+                <div style="margin-left: 100px">
+                    <input type="submit"value="提交">
+{#                    <a href="/backend/handel-obstacle-add-{{ nid }}/" class="item-button right">提交</a>#}
+                    <a href=""class="item-button right">取消</a>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+{% block js %}
+    <script src="/statics/plugs/kindeditor-4.1.11/kindeditor/kindeditor-all-min.js"></script>
+    <script src="/statics/js/jquery-3.3.1.js"></script>
+    <script>
+        $(function () {
+            kindeditorinit();
+        });
+        function kindeditorinit() {
+            kind = KindEditor.create('#solution', {
+                width: '100%',       // 文本框宽度(可以百分比或像素)
+                height: '350px',     // 文本框高度(只能像素)
+                minWidth: 200,       // 最小宽度（数字）
+                minHeight: 400,      // 最小高度（数字）
+                resizeType:0,       //不允许在任何方向上拉动文本框
+                uploadJson:"/pictures/{{ username }}/"
+            });
+        }
+    </script>
+{% endblock %}

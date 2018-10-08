@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .outer{
+            position: relative;
+        }
+        .box1{
+            width: 200px;
+            height: 200px;
+            background-color: #2b542c;
+        }
+        .box2{
+            width: 400px;
+            height: 200px;
+            background-color: #2aabd2;
+            position: absolute;
+            margin-top: 50px;
+            margin-left: 120px;
+            {#top: 200px;#}
+            {#left: 200px;#}
+        }
+        .box3{
+            width: 200px;
+            height: 200px;
+            background-color:red;
+        }
+    </style>
+</head>
+<body>
+<div class="outer">
+    <div>
+        <div>
+            <div class="box1"></div>
+            <div class="box2"></div>
+            <div class="box3"></div>
+        </div>
+    </div>
+</div>
+<script>
+    //匿名函数1，和标准函数不一样，先去掉函数的名字，再赋值给一个变量。再函数赋值给变量前执行会报错，func不能调用
+    var func = function () {
+        alert(123)
+    };
+    func();
+    //匿名函数2
+    (function () {
+        alert(456)
+    })()
+</script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+{% extends "manage_edit_base.html" %}
+{% block css %}{% endblock %}
+{% block contents %}
+    <ol class="breadcrumb" style="margin-bottom: 0;">
+        <li><a href="#">分类管理</a></li>
+        <li class="active">分类列表</li>
+    </ol>
+        <div style="background-color: #dddddd;font-size: 20px;margin: 5px 0px">
+            <a target="_blank" href="/{{ user_obj.username }}/backend/add-classification/" class="right"
+               style="display: inline-block;padding:0 10px;background-color: #428bca;color: #ffffff;">
+                <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                创建新分类
+            </a>
+    </div>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>分类名</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+            {% for item in classification_obj %}
+                <tr>
+                    <td><a href="/{{ username }}/{{ item.id }}.html/">{{ item.caption }}</a></td>
+                    <td>
+                        <a class="btn btn-danger btn-xs" href="/backend/delete-classification-{{ item.id }}.html/">
+                            <i class="fa fa-times" aria-hidden="true"></i>
+                            删除
+                        </a>
+                        |
+                        <a class="btn btn-primary btn-xs" href="/backend/edit-classification-{{ item.id }}.html/">
+                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                            编辑
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+{% block js %}{% endblock %}

@@ -1,0 +1,78 @@
+
+.left {
+    float: left;
+}
+
+.right {
+    float: right;
+}
+
+.hide {
+    display: none;
+}
+
+body {
+    margin: 0;
+}
+
+.Page-header {
+    height: 48px;
+    background-color: #1d85a4;
+    min-width: 1100px;
+    line-height: 48px;
+}
+
+.Page-header .Page-log {
+    background-color: #2563a4;
+    width: 200px;
+    color: white;
+    font-size: 24px;
+    text-align: center;
+}
+
+.Page-header .header-left-menus .item-a, .Page-header .header-right-menus .item-a {
+    color: white;
+    text-align: center;
+    padding: 0 10px;
+    height: 48px;
+    display: inline-block;
+}
+
+.Page-header .header-left-menus .item-a:hover, .Page-header .header-right-menus .item-a:hover {
+    background-color: #2563a4;
+}
+
+.Page-header .header-left-menus .item-a-list:hover .menu-list1, .Page-header .header-right-menus .item-a-list:hover .menu-list2 {
+    display: block;
+}
+
+.Page-header .header-left-menus .item-a-list .menu-list1 a, .Page-header .header-right-menus .item-a-list .menu-list2 a {
+    display: block;
+    line-height: 40px;
+    background-color: lightgray;
+    text-align: center;
+    border: 1px solid gray;
+}
+
+.header-right-menus .item-img {
+    height: 36px;
+    width: 36px;
+    border-radius: 50%;
+}
+
+.Page-header .header-right-menus .item-a-list .menu-list2 {
+    position: absolute;
+    top: 48px;
+    width: 130px;
+    right: 0px;
+    display: none;
+}
+
+.Page-header .header-right-menus .list-group-item, .Page-header .header-left-menus .list-group-item {
+    padding: 0px;
+    text-align: center;
+}
+
+.Page-header .header-left-menus .item-a-list .menu-list1 {
+    display: none;
+}

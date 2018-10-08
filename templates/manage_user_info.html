@@ -1,0 +1,80 @@
+{% extends "manage_edit_base.html" %}
+{% block css %}{% endblock %}
+{% block contents %}
+    <ol class="breadcrumb">
+        <li><a href="#">用户管理</a></li>
+        <li class="active">用户信息</li>
+    </ol>
+    <div>
+        <div class="row" style="position: relative;">
+            <form class="form-horizontal" method="post"action="/{{ username }}/manage_user_info/">
+                <div class="col-xs-12">
+                    <div class="form-group">
+                        <label class="col-xs-2 control-label">用户名</label>
+
+                        <div class="col-xs-5">
+{#                            <input type="text" class="form-control" id="user-name" placeholder="{{ username }}" name="username"/>#}
+                            {{ user_info_obj.username }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-2 control-label">邮箱</label>
+                        <div class="col-sm-5">
+{#                            <input type="text" class="form-control" id="email" placeholder="请输入邮箱" name="email"/>#}
+                            {{ user_info_obj.email }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="nickname" class="col-xs-2 control-label">昵称</label>
+                        <div class="col-xs-5">
+{#                            <input type="text" class="form-control" id="nickname" placeholder="请输入昵称" name="nickname"/>#}
+                            {{ user_info_obj.user_nickname }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="blogTitle" class="col-xs-2 control-label">博客标题内容</label>
+
+                        <div class="col-xs-8">
+{#                            <textarea id="blogTitle" style="min-height: 100px" class="form-control"#}
+{#                                      placeholder="" name="blog_title"></textarea>#}
+                            {{ user_info_obj.blog_title }}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-xs-offset-2 col-xs-10">
+                            <button type="submit" class="btn btn-primary">保 存</button>
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+            <div style="position: absolute;" class="col-xs-offset-7 col-xs-5">
+                <div class="avatar-container">
+                    <iframe style="display: none;" id="upload_iframe" name="upload_iframe"onload="update_img(this)"></iframe>
+                    <form method="POST" action="/{{ username }}/upload-avatar/" enctype="multipart/form-data"
+                          target="upload_iframe"id="upload_fm">
+                        {% csrf_token %}
+                        <img id="previewImg" src="/{{ user_obj.img }}"
+                             style="border-radius: 50%;height: 70px;width: 70px"/>
+                        <div class="text">点击图片更换(<a href="#">撤销</a>)</div>
+                        <input id="avatarImg" name="avatar_img" type="file" class="img-file"onchange="submit_img()"/>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+    <script>
+        {#var data = new FormData();#}
+        {#data.append("avatar_img",$("#avatarImg").val());#}
+        function submit_img() {
+            document.getElementById("upload_fm").submit();
+        }
+        function update_img(ths){
+            var data = JSON.parse(ths.contentWindow.document.body.innerHTML);
+            $("#previewImg").attr("src",data.index);
+        }
+    </script>
+{% endblock %}

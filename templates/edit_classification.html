@@ -1,0 +1,13 @@
+{% extends "manage_edit_base.html" %}
+{% block css %}{% endblock %}
+{% block contents %}
+    <form action="/backend/edit-classification-{{ classification_obj.id }}.html/" method="post">
+        {% csrf_token %}
+        <div>
+            <label class="required" for="id_title">分类名:</label>
+            <input type="text" name="caption" value="{{ classification_obj.caption }}">
+        </div>
+        <input type="submit" value="保存">
+    </form>
+{% endblock %}
+{% block js %}{% endblock %}

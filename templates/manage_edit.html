@@ -1,0 +1,123 @@
+{% extends "manage_edit_base.html" %}
+
+{% block css %}
+    <style>
+        .item-search{
+            margin-left: 100px;
+            margin-top: 15px;
+        }
+    .paging{
+        margin: 5px;
+        text-align: center;
+    }
+    </style>
+{% endblock %}
+{% block contents %}
+    <ol class="breadcrumb" style="margin-bottom: 0;">
+        <li><a href="#">文章管理</a></li>
+        <li class="active">文章列表</li>
+    </ol>
+    <div style="border: 1px dashed #dddddd;padding: 8px;border-left: 3px solid #337ab7;">
+    <i class="fa fa-search" aria-hidden="true"></i>
+        搜索条件
+    </div>
+    <div>
+        <div class="item-search">
+            <div class="" role="group" aria-label="Default_button1">
+                {% if tc_id.tag_id == 0 %}
+                    <a class="btn btn-default" href="/{{ username }}/manage_edit-0-{{ tc_id.classification_id }}/"
+                       style="background-color: #05b6d2">全部</a>
+                {% else %}
+                    <a class="btn btn-default"
+                       href="/{{ username }}/manage_edit-0-{{ tc_id.classification_id }}/">全部</a>
+                {% endif %}
+                {% for item in tag %}
+                    {% if tc_id.tag_id == item.id %}
+                        <a class="btn btn-default"
+                           href="/{{ username }}/manage_edit-{{ item.id }}-{{ tc_id.classification_id }}/"style="background-color: #05b6d2">
+                            {{ item.caption }}
+                        </a>
+                    {% else %}
+                        <a class="btn btn-default"
+                           href="/{{ username }}/manage_edit-{{ item.id }}-{{ tc_id.classification_id }}/">
+                            {{ item.caption }}
+                        </a>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        <div class="item-search">
+            <div class="" role="group" aria-label="Default_button2">
+            {% if tc_id.classification_id == 0 %}
+                <a class="btn btn-default" href="/{{ username }}/manage_edit-{{ tc_id.tag_id }}-0/" style="background-color: #05b6d2">全部</a>
+                {% else %}
+                <a class="btn btn-default" href="/{{ username }}/manage_edit-{{ tc_id.tag_id }}-0/">全部</a>
+            {% endif %}
+                {% for item in classification %}
+                    {% if tc_id.classification_id == item.id %}
+                        <a href="/{{ username }}/manage_edit-{{ tc_id.tag_id }}-{{ item.id }}/" class="btn btn-default" style="background-color: #05b6d2">
+                        {{ item.caption }}
+                    </a>
+                        {% else %}
+                        <a href="/{{ username }}/manage_edit-{{ tc_id.tag_id }}-{{ item.id }}/" class="btn btn-default">
+                        {{ item.caption }}
+                    </a>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div style="background-color: #dddddd;font-size: 20px;margin: 5px 0px">
+                    <i class="fa fa-table" aria-hidden="true"></i>
+            搜索文章篇
+            <a target="_blank" href="/{{ user_obj.username }}/backend/add-article/" class="right"
+               style="display: inline-block;padding:0 10px;background-color: #428bca;color: #ffffff;">
+                <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                创建新文章
+            </a>
+    </div>
+
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>文章标题</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+            {% for item in article_obj %}
+                <tr>
+                    <td><a href="/{{ username }}/{{ item.id }}.html/">{{ item.title }}</a></td>
+                    <td>
+                        <a class="btn btn-danger btn-xs">
+                            <i class="fa fa-times" aria-hidden="true"></i>
+                            删除
+                        </a>
+                        |
+                        <a class="btn btn-primary btn-xs" href="/backend/edit-article-{{ item.id }}.html/">
+                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                            编辑
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+<div class="paging">
+        <ul class="pagination">
+        <li>
+            <a href="#" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+        {{ page_obj.pageStr|safe }}
+        <li>
+            <a href="#" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+    </ul>
+</div>
+{% endblock %}
+{% block js %}{% endblock %}

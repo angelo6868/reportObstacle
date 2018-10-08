@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/statics/plugs/bootstrap-3.3.7-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/statics/plugs/font-awesome-4.7.0/css/font-awesome.min.css">
+    <style>
+        .left{
+            float: left;
+        }
+        .right{
+            float: right;
+        }
+        .hide{
+            display: none;
+        }
+        .header-page{
+            width: 100%;
+            height: 68px;
+            background-color: #92d1e1;
+            line-height: 68px;
+            min-width: 1100px;
+        }
+        .total-content{
+            min-width: 1100px;
+        }
+        .header-name{
+            width: 250px;
+            text-align: center;
+            font-size: 30px;
+        }
+        .left-content{
+            width: 240px;
+            margin: 3px 3px 0px 3px;
+            position: absolute;
+            top: 68px;
+            left: 0px;
+            background-color: #828485;
+        }
+        .right-content{
+            position: absolute;
+            top: 68px;
+            left: 250px;
+            right: 0px;
+        }
+        .title-article{
+            width: 100%;
+            height: 58px;
+            font-size: 23px;
+            line-height: 58px;
+            border-bottom: 1px solid black;
+        }
+        .article-info{
+            width: 95%;
+            margin: 20px auto;
+            height: 88px;
+            line-height: 88px;
+            border: 1px solid gray;
+        }
+        .Praise-up-down{
+            margin: 30px 25px;
+            padding: 0 20px;
+        }
+        .bottom-page{
+            height: 200px;
+            background-color: white;
+        }
+
+        .feedback_area_title {
+            border-bottom: 1px solid #ddd;
+            font-size: 14px;
+            font-weight: bold;
+            margin: 20px 0 10px;
+        }
+
+        .feedbackItem {
+            padding: 8px;
+            border-bottom: 1px dotted #ccc;
+        }
+
+        div.feedbackItem div.feedbackCon {
+            color: #888;
+            font-size: 12px;
+            line-height: 135%;
+            padding: 7px;
+            padding-right: 0;
+        }
+
+        .comment_vote {
+            text-align: right;
+        }
+        .feedbackManage{
+            float: right;
+        }
+    </style>
+</head>
+<body>
+<div class="header-page">
+    <div class="header-name left">{{ username }}</div>
+    <div class="btn-group right">
+        <a class="btn" href="/homepage/">博客首页</a>
+        <a class="btn" href="/{{ username }}.html/">个人主页</a>
+    </div>
+</div>
+<div class="total-content">
+    <div class="left-content left">
+        <div>
+            <div>我的公告</div>
+            <div>我的标签</div>
+            <div>我的分类</div>
+            <div>最新评论</div>
+        </div>
+    </div>
+    <div class="right-content right">
+        <div class="title-article">{{ article.article.title }}</div>
+            {{ article.detail| safe }}
+        <div class="up-down">
+            <button class="Praise-up-down up" style="display: inline-block">
+                <i class="fa fa-thumbs-o-up fa-3x" aria-hidden="true"></i>
+                <div class="up-count">{{ article.article.up_count }}</div>
+            </button>
+            <button class="Praise-up-down" style="display: inline-block">
+                <i class="fa fa-thumbs-o-down fa-3x" aria-hidden="true"></i>
+                <div class="down-count">{{ article.article.down_count }}</div>
+            </button>
+        </div>
+        <div class="article-info">
+            <div><img src="/statics/icon/warn.jpg" alt=""style="width:50px;height: 50px;margin: 0 15px;float: left"/></div>
+            <div class="left">
+                <div style="height: 25px">作者：{{ username }}</div>
+                <div style="height: 25px">出处：</div>
+            </div>
+        </div>
+        <div id="blog-comments-placeholder">
+            <div id="comments_pager_top"></div>
+            <!--done-->
+            <div class="feedback_area_title">评论列表</div>
+            <div class="feedbackNoItems"></div>
+            {% for item in comment %}
+                <div class="feedbackItem">
+                    <div class="feedbackListSubtitle">
+                        <div class="feedbackManage">
+					&nbsp;&nbsp;
+                            <span class="comment_actions">
+                                <a href="javascript:void(0);">回复</a>
+                                <a href="javascript:void(0);">引用</a>
+                            </span>
+				        </div>
+                        <a href="#" class="layer">#{{ forloop.counter }}楼</a><a href=""></a><span class="comment_date">{{ item.create_time|date:"Y-m-d H:i" }}</span>
+                        <a href="">{{ item.user }}</a>
+                        <a href=""></a>
+                    </div>
+                    <div class="feedbackCon">
+                        <div id="comment_body_{{ item.id }}" class="blog_comment_body">{{ item.content | safe}}</div>
+                        <div class="comment_vote">
+                            <a href="javascript:void(0);" class="comment_digg">支持(0)</a>
+                            <a href="javascript:void(0);" class="comment_bury">反对(0)</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+
+            <div class="feedbackItem">
+                <div class="feedbackListSubtitle">
+                    <div class="feedbackManage">
+                        &nbsp;&nbsp;<span class="comment_actions"></span>
+                    </div>
+                    <a href="#3827287" class="layer">#1楼</a><a name="3827287" id="comment_anchor_3827287"></a> <span
+                        class="comment_date">2017-10-31 19:29</span> <a id="a_comment_author_3827287"
+                                                                        href="http://home.cnblogs.com/u/1268173/"
+                                                                        target="_blank">徐来</a> <a
+                        href="http://msg.cnblogs.com/send/%E5%BE%90%E6%9D%A5" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+                </div>
+                <div class="feedbackCon">
+                    <div id="comment_body_3827287" class="blog_comment_body">写得很详细 谢谢！</div>
+                    <div class="comment_vote"><a href="javascript:void(0);" class="comment_digg"
+                                                 onclick="return voteComment(3827287,'Digg',this)">支持(0)</a><a
+                            href="javascript:void(0);" class="comment_bury"
+                            onclick="return voteComment(3827287,'Bury',this)">反对(0)</a></div>
+                </div>
+            </div>
+            <div class="feedbackItem">
+                <div class="feedbackListSubtitle">
+                    <div class="feedbackManage">
+                        &nbsp;&nbsp;<span class="comment_actions"></span>
+                    </div>
+                    <a href="#4029700" class="layer">#2楼</a><a name="4029700" id="comment_anchor_4029700"></a><span
+                        id="comment-maxId" style="display:none;">4029700</span><span id="comment-maxDate"
+                                                                                     style="display:none;">2018/7/26 19:41:23</span>
+                    <span class="comment_date">2018-07-26 19:41</span> <a id="a_comment_author_4029700"
+                                                                          href="https://www.cnblogs.com/chaojiyingxiong/"
+                                                                          target="_blank">年轻人——001</a> <a
+                        href="http://msg.cnblogs.com/send/%E5%B9%B4%E8%BD%BB%E4%BA%BA%E2%80%94%E2%80%94001"
+                        title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+                </div>
+                <div class="feedbackCon">
+                    <div id="comment_body_4029700" class="blog_comment_body">银角大王</div>
+                    <div class="comment_vote"><a href="javascript:void(0);" class="comment_digg"
+                                                 onclick="return voteComment(4029700,'Digg',this)">支持(0)</a><a
+                            href="javascript:void(0);" class="comment_bury"
+                            onclick="return voteComment(4029700,'Bury',this)">反对(0)</a></div>
+                    <span id="comment_4029700_avatar" style="display:none;">http://pic.cnblogs.com/face/1419341/20180629211234.png</span>
+                </div>
+            </div>
+            <div id="comments_pager_bottom"></div>
+        </div>
+
+        <div>
+            <div>评论：</div>
+            <textarea name="content" id="content"></textarea>
+        </div>
+        <button class="submit-comment">提交评论</button>
+    </div>
+    <div class="bottom-page"></div>
+</div>
+
+
+<script src="/statics/plugs/kindeditor-4.1.11/kindeditor/kindeditor-all-min.js"></script>
+<script src="/statics/js/jquery-3.3.1.js"></script>
+<script>
+    $(function () {
+        kindeditorinit();
+        praiseordown();
+        submit_comment();
+    });
+    function kindeditorinit() {
+            kind = KindEditor.create('#content', {
+            width: '100%',       // 文本框宽度(可以百分比或像素)
+            height: '300px',     // 文本框高度(只能像素)
+            minWidth: 200,       // 最小宽度（数字）
+            minHeight: 400      // 最小高度（数字）
+        });
+    }
+    function praiseordown() {
+        $(".up-down .Praise-up-down").click(function () {
+            var is_up = $(this).hasClass("up");
+            var article_id = "{{ article.article.id }}";
+            $.ajax({
+                url:"/up_down/",
+                data:{"article_id":article_id,"is_up":is_up},
+                success:function (arg) {
+                    var data = JSON.parse(arg);
+                    console.log(data);
+                    if (data["status"]=="ok"){
+                        $(".Praise-up-down .up-count").text(data["up_count"]);
+                        $(".Praise-up-down .down-count").html(data["down_count"]);
+                    }
+                }
+            });
+        })
+    }
+    function submit_comment() {
+        $(".submit-comment").click(function () {
+            kind.sync();
+            var article_id = "{{ article.article.id }}";
+            var comment_value = $("#content").val();
+            $.ajax({
+                url:"/process-comment/",
+                type:"post",
+                data:{"article_id":article_id,"comment_value":comment_value},
+                success:function (arg) {
+                    alert(arg)
+                }
+            })
+        }
+    )
+    }
+
+</script>
+</body>
+</html>

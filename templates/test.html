@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form>
+    <input type="text" placeholder="验证码">
+    <img id="img_identify" src="/identify_code/" alt="">
+</form>
+<script src="/statics/js/jquery-3.3.1.js"></script>
+<script>
+    $(function () {
+        $("#img_identify").click(function () {
+            this.src = this.src + "?";
+        })
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/statics/plugs/bootstrap-3.3.7-dist/css/bootstrap.min.css" type="text/css">
+    <style>
+        #box{
+            width: 800px;
+            height: 1000px;
+            margin: 0px auto;
+            margin-top: 100px;
+        }
+    </style>
+</head>
+<body>
+<div id="box">
+    <form class="form-horizontal" novalidate action="/login/" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="inputEmail3" class="col-sm-2 control-label">用户名</label>
+            <div class="col-sm-10">
+                {{ obj.username }}{{ obj.errors.username.0 }}
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="inputPassword3" class="col-sm-2 control-label">密码</label>
+            <div class="col-sm-10">
+                {{ obj.pwd }}{{ obj.errors.pwd.0 }}
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox"> Remember me
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-default">提交</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script src="/statics/plugs/bootstrap-3.3.7-dist/js/bootstrap.js"></script>
+</body>
+</html>
