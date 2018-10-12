@@ -81,11 +81,13 @@
                             <i class="fa fa-times" aria-hidden="true"></i>
                             删除
                         </a>
-                        |
-                        <a class="btn btn-primary btn-xs" href="/backend/edit-obstacle-{{ item.id }}.html/">
-                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                            编辑
-                        </a>
+                        {% if item.status == 1 %}
+                            |
+                            <a class="btn btn-primary btn-xs" href="/backend/edit-obstacle-{{ item.id }}.html/">
+                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                编辑
+                            </a>
+                        {% endif %}
                         |
                         <a class="btn btn-primary btn-xs" href="/backend/check-obstacle-{{ item.id }}.html/">
                             <i class="fa fa-pencil-square-o" aria-hidden="true"></i>

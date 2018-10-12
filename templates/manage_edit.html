@@ -44,6 +44,13 @@
                         </a>
                     {% endif %}
                 {% endfor %}
+                            {% if tc_id.tag_id == -1 %}
+                    <a class="btn btn-default" href="/{{ username }}/manage_edit--1-{{ tc_id.classification_id }}/"
+                       style="background-color: #05b6d2">无标签</a>
+                {% else %}
+                    <a class="btn btn-default"
+                       href="/{{ username }}/manage_edit--1-{{ tc_id.classification_id }}/">无标签</a>
+                {% endif %}
             </div>
         </div>
         <div class="item-search">
@@ -64,6 +71,11 @@
                     </a>
                     {% endif %}
                 {% endfor %}
+                {% if tc_id.classification_id == -1 %}
+                    <a class="btn btn-default" href="/{{ username }}/manage_edit-{{ tc_id.tag_id }}--1/" style="background-color: #05b6d2">无分类</a>
+                    {% else %}
+                    <a class="btn btn-default" href="/{{ username }}/manage_edit-{{ tc_id.tag_id }}--1/">无分类</a>
+                {% endif %}
             </div>
         </div>
     </div>

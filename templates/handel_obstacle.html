@@ -32,32 +32,40 @@
                 <label class="required" for="id_title">报障详细内容：</label>
                 <textarea class="form-control" id="content" name="obstacle_content"disabled>{{ user_obstacle_obj.content }}</textarea>
             </div>
-            <div class="item-content">
-                <label class="required" for="id_title">对该报障的操作:</label>
-                <div style="margin-left: 100px">
-                    <a href="/backend/handel-obstacle-add-{{ nid }}/" class="item-button">接收</a>
-                    <a href=""class="item-button">拒绝</a>
+            {% if user_obstacle_obj.status == 3 %}
+                <div class="item-content">
+                    <label class="required" for="id_title">解决方案：</label>
+                    <textarea class="form-control" id="content" name="obstacle_solution"disabled>{{ user_obstacle_obj.solution }}</textarea>
                 </div>
-            </div>
+            {% endif %}
+            {% if user_obstacle_obj.status == 1 %}
+                <div class="item-content">
+                    <label class="required" for="id_title">对该报障的操作:</label>
+                    <div style="margin-left: 100px">
+                        <a href="/backend/handel-obstacle-add-{{ nid }}/" class="item-button">接收</a>
+                        <a href="" class="item-button">拒绝</a>
+                    </div>
+                </div>
+            {% endif %}
         </form>
     </div>
 {% endblock %}
 {% block js %}
-    <script src="/statics/plugs/kindeditor-4.1.11/kindeditor/kindeditor-all-min.js"></script>
-    <script src="/statics/js/jquery-3.3.1.js"></script>
-    <script>
-        $(function () {
-            kindeditorinit();
-        });
-        function kindeditorinit() {
-            kind = KindEditor.create('#content', {
-                width: '100%',       // 文本框宽度(可以百分比或像素)
-                height: '350px',     // 文本框高度(只能像素)
-                minWidth: 200,       // 最小宽度（数字）
-                minHeight: 400,      // 最小高度（数字）
-                resizeType:0,       //不允许在任何方向上拉动文本框
-                uploadJson:"/pictures/{{ username }}/"
-            });
-        }
-    </script>
+{#    <script src="/statics/plugs/kindeditor-4.1.11/kindeditor/kindeditor-all-min.js"></script>#}
+{#    <script src="/statics/js/jquery-3.3.1.js"></script>#}
+{#    <script>#}
+{#        $(function () {#}
+{#            kindeditorinit();#}
+{#        });#}
+{#        function kindeditorinit() {#}
+{#            kind = KindEditor.create('#content', {#}
+{#                width: '100%',       // 文本框宽度(可以百分比或像素)#}
+{#                height: '350px',     // 文本框高度(只能像素)#}
+{#                minWidth: 200,       // 最小宽度（数字）#}
+{#                minHeight: 400,      // 最小高度（数字）#}
+{#                resizeType:0,       //不允许在任何方向上拉动文本框#}
+{#                uploadJson:"/pictures/{{ username }}/"#}
+{#            });#}
+{#        }#}
+{#    </script>#}
 {% endblock %}

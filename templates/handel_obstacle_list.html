@@ -78,11 +78,19 @@
                             <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                             查看
                         </a>
-                        |
-                        <a class="btn btn-primary btn-xs" href="/backend/handel-solution-obstacle-{{ item.id }}.html/">
-                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                            处理
-                        </a>
+                        {% if item.status == 2 %}
+                            |
+                            <a class="btn btn-primary btn-xs" href="/backend/handel-solution-obstacle-{{ item.id }}.html/">
+                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                处理
+                            </a>
+                            {% else %}
+                            |
+                            <a class="btn btn-primary btn-xs" href="" style="background-color: #d29b13">
+                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+
+                            </a>
+                        {% endif %}
                     </td>
                 </tr>
             {% endfor %}

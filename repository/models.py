@@ -20,11 +20,11 @@ class UserTable(models.Model):
 
 
 class BlogTable(models.Model):
-    surfix = models.CharField(max_length=128)
-    theme = models.CharField(max_length=32,verbose_name="博客主题")
-    summary = models.CharField(max_length=128,verbose_name="博客简介")
+    surfix = models.CharField(max_length=128,)
+    theme = models.CharField(max_length=32,verbose_name="博客主题",null=True)
+    summary = models.CharField(max_length=128,verbose_name="博客简介",null=True)
     user = models.OneToOneField("UserTable",on_delete=models.CASCADE)
-    blog_title = models.CharField(max_length=128,default=None)
+    blog_title = models.CharField(max_length=128,default=None,null=True)
 
     class Meta:
         db_table = "BlogTable"
@@ -35,6 +35,9 @@ class BlogTable(models.Model):
 
 
 class ReportTable(models.Model):
+    """
+    报障表
+    """
     choices = (
         (1,"待处理"),
         (2,"处理中"),
@@ -85,8 +88,10 @@ class Article(models.Model):
     title = models.CharField(max_length=32,verbose_name="文章标题")
     summary = models.CharField(max_length=128,verbose_name="文章简介",default="")
     user = models.ForeignKey("BlogTable",verbose_name="文章所在博客",on_delete=models.CASCADE)
-    classification = models.ForeignKey("Classification",verbose_name="文章分类",on_delete=models.CASCADE)
-    label = models.ForeignKey("Label",verbose_name="文章标签",on_delete=models.CASCADE)
+    # on_delete=models.SET_NULL表示主表删除后，将该字段设置为默认0，前提是该字段有null=True，这样当删除对文章的标签和分类时，
+    # 文章不会被删除，而是变为无标签，或者无分类的文章
+    classification = models.ForeignKey("Classification",verbose_name="文章分类",on_delete=models.SET_NULL,null=True)
+    label = models.ForeignKey("Label",verbose_name="文章标签",on_delete=models.SET_NULL,null=True)
     create_time = models.DateTimeField(verbose_name="创建时间",auto_now_add=True,null=True)
     comment_count = models.IntegerField(verbose_name="评论数",default=0)
     read_count = models.IntegerField(verbose_name="阅读数",default=0)

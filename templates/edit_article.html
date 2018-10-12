@@ -28,16 +28,28 @@
             <ul class="list-group">
                 <lable class="radio-inline">文章标签:</lable>
                 {% for item in tag %}
-                    <li class="list-group-item"><input type="radio" name="inlineRadioOptions1" id="inlineRadio1" value="{{ item.id }}"> {{ item.caption }}</li>
+                    {% if article_obj.label_id == item.id %}
+                        <li class="list-group-item"><input type="radio" name="inlineRadioOptions1" id="inlineRadio1"
+                                                           value="{{ item.id }}" checked> {{ item.caption }}</li>
+                    {% else %}
+                        <li class="list-group-item"><input type="radio" name="inlineRadioOptions1" id="inlineRadio1"
+                                                           value="{{ item.id }}"> {{ item.caption }}</li>
+                    {% endif %}
                 {% endfor %}
             </ul>
             </div>
             <div class="item-article-choose">
                 <ul class="list-group">
                 <lable class="radio-inline">文章分类:</lable>
-                {% for item in classification %}
-                    <li class="list-group-item"><input type="radio" name="inlineRadioOptions2" id="inlineRadio2" value="{{ item.id }}"> {{ item.caption }}</li>
-                {% endfor %}
+                    {% for item in classification %}
+                        {% if article_obj.classification_id == item.id %}
+                            <li class="list-group-item"><input type="radio" name="inlineRadioOptions2" id="inlineRadio2"
+                                                               value="{{ item.id }}" checked> {{ item.caption }}</li>
+                        {% else %}
+                            <li class="list-group-item"><input type="radio" name="inlineRadioOptions2" id="inlineRadio2"
+                                                               value="{{ item.id }}"> {{ item.caption }}</li>
+                        {% endif %}
+                    {% endfor %}
                 </ul>
             </div>
             <div class="item-submit">

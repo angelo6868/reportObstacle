@@ -9,47 +9,82 @@ import datetime
 
 
 def add_article(request,username):
+    """
+    创建文章，GET请求返回创建文章页面
+    :param request:
+    :param username:url中传递过来的用户名，当然登录后也可以从session中拿
+    :return:
+    """
     if request.method == "GET":
+        # 在前端页面中，页面跳转的地址需要有用户名和用户对象
         user_obj = models.UserTable.objects.filter(username=username).first()
-        tag = models.Label.objects.all()
-        classification = models.Classification.objects.all()
+        # 需要选择文章标签和文章分类在前端页面显示，为radio类型,标签和分类为具体登录用户的标签和分类
+        tag = models.Label.objects.filter(user__username=username)
+        classification = models.Classification.objects.filter(user__username=username)
         return render(request,"add_article.html",locals())
     else:
-        print(request.POST)
+        # 从表单中拿到文章的标题，内容，标签名和分类名
+        condition = {}
         article_title = request.POST.get("article_title")
+        condition["title"] = article_title
         article_content = request.POST.get("article_content")
         tag_id = request.POST.get("inlineRadioOptions1")
+        if tag_id:
+            condition["label_id"] = tag_id
         classification_id = request.POST.get("inlineRadioOptions2")
-        username = request.session.get("username")
+        if classification_id:
+            condition["classification_id"] = classification_id
+        print(tag_id,classification_id)
+        # url中传递有用户名，不用获取了
+        # username = request.session.get("username")
         user_blog = models.BlogTable.objects.filter(user__username=username).first()
-        article_obj = models.Article.objects.create(title=article_title,user=user_blog,classification_id=classification_id,label_id=tag_id)
+        condition["user"] = user_blog
+        print(condition)
+        # 根据表单中输入的值，创建文章对象
+        article_obj = models.Article.objects.create(**condition)
+        # 创建文章详细对象
         models.ArticleDetail.objects.create(detail=article_content,article=article_obj)
-        return redirect("/%s/backend/add-article/")
+        return redirect("/%s/backend/add-article/"%username)
 
 
 def add_tag(request,username):
+    """
+    用户添加文章的标签
+    :param request:
+    :param username:
+    :return:
+    """
+    # 共用的base模板中，需要传入用户对象，标签添加页面没有其他需要传入的变量了
     user_obj = models.UserTable.objects.filter(username=username).first()
     if request.method == "GET":
         return render(request,"add_tag.html",locals())
     else:
-        print(request.POST)
+        # 拿到标签的名字，标签字段只有caption和自增的id
         caption = request.POST.get("caption")
-        caption_num = models.Label.objects.filter(caption=caption).count()
+        # 检测数据库中是否有和拿到的标签名重名,并且是同一个人的标签
+        caption_num = models.Label.objects.filter(caption=caption,user__username=username).count()
         if not caption_num:
+            # 没有，则在数据库中创建标签
             models.Label.objects.create(caption=caption,user=user_obj)
             return redirect("/%s/manage_tag/"%username)
         else:
+            # 有重名的，则重新返回增加标签页面
             return render(request,"add_tag.html",locals())
 
 
 def add_classification(request,username):
+    """
+    添加用户的分类，
+    :param request:
+    :param username:
+    :return:
+    """
     user_obj = models.UserTable.objects.filter(username=username).first()
     if request.method == "GET":
         return render(request,"add_classification.html",locals())
     else:
-        print(request.POST)
         caption = request.POST.get("caption")
-        caption_num = models.Classification.objects.filter(caption=caption).count()
+        caption_num = models.Classification.objects.filter(caption=caption,user__username=username).count()
         if not caption_num:
             models.Classification.objects.create(caption=caption,user=user_obj)
             return redirect("/%s/manage_classification/"%username)
@@ -156,13 +191,13 @@ def delete_classification(request,nid):
 
 
 def manage_tag(request,username):
-    tag_obj = models.Label.objects.all()
+    tag_obj = models.Label.objects.filter(user__username=username)
     user_obj = models.UserTable.objects.filter(username=username).first()
     return render(request,"manage_tag.html",locals())
 
 
 def manage_classification(request,username):
-    classification_obj = models.Classification.objects.all()
+    classification_obj = models.Classification.objects.filter(user__username=username)
     user_obj = models.UserTable.objects.filter(username=username).first()
     return render(request,"manage_classification.html",locals())
 
@@ -201,16 +236,19 @@ def manage_user_info(request,username):
 
 def manage_user_obstacle(request,username,*args,**kwargs):
     """
-
+    普通用户管理报障单页面
     :param request:
     :param username: 用户名
     :return:
     """
     if request.method == "GET":
         condition = {}
+        # status为选择状态，1待处理，2处理中，3已处理，传到前端显示到页面上
         status = models.ReportTable.choices
+        # status_id为根据url拿到的选择相应状态的id值,0为全部
         status_id = int(kwargs['status_id'])
         user_obj = models.UserTable.objects.filter(username=username).first()
+        # 往筛选条件condition中填充值，筛选出符合条件的报障单
         condition["user_report"] = user_obj
         if status_id:
             condition["status"] = status_id
@@ -255,30 +293,38 @@ def handel_obstacle_list(request,nid):
     :return:
     """
     status_id = int(nid)
+    # 拿到登陆者的用户名和用户对象
     username = request.session.get("username")
     user_obj = models.UserTable.objects.filter(username=username).first()
     if not status_id:
-        obstacle_obj = models.ReportTable.objects.filter(Q(processor__username=username) | Q(status=1) | Q(status=2))
+        # status_id=0表示查看所有情况的报障单，处理者是自己的包括已处理和处理中的，或者报障单状态为未处理的情况
+        obstacle_obj = models.ReportTable.objects.filter(Q(processor__username=username) | Q(status=1) )
     elif status_id == 3:
-        obstacle_obj = models.ReportTable.objects.filter(processor__username=username)
+        # status_id == 3表示查看已处理的报障单，需要两个限制条件，1、处理者是自己；2、状态为已处理
+        obstacle_obj = models.ReportTable.objects.filter(processor__username=username,status=status_id)
+    elif status_id == 2:
+        # status_id == 2表示查看处理中的报障单，需要两个限制条件，1、处理者是自己；2、状态为处理中
+        obstacle_obj = models.ReportTable.objects.filter(processor__username=username,status=status_id)
     else:
+        # 剩下status_id == 1的情况，表示查看所有未处理的报障单
         obstacle_obj = models.ReportTable.objects.filter(status=status_id)
+    # status传到前端，为搜索报障单的4个条件
     status = models.ReportTable.choices
     return render(request,"handel_obstacle_list.html",locals())
 
 
 def handel_obstacle(request,nid):
     """
+    在handel_obstacle_list.html页面中点击查看，进入到该view函数，查看报障单的具体报障内容
     处理者查看报障单的内容，确定自己能否处理，以决定是否接单或者取消接单
     :param request:
-    :param nid:
+    :param nid:url传递过来的报障单的id号，id在数据库中为主键，自增，唯一的，因此查看时，根据该id查看点击的唯一报障单
     :return:
     """
     username = request.session.get("username")
-    print(nid)
     if request.method == "GET":
         user_obj = models.UserTable.objects.filter(username=username).first()
-        user_obstacle_obj = models.ReportTable.objects.filter(user_report=user_obj,id=nid).first()
+        user_obstacle_obj = models.ReportTable.objects.filter(id=nid).first()
         return render(request,"handel_obstacle.html",locals())
 
 
@@ -293,6 +339,7 @@ def handel_obstacle_solution(request,nid):
     username = request.session.get("username")
     user_obj = models.UserTable.objects.filter(username=username).first()
     if request.method == "GET":
+        # 只能拿到该报障单处于处理中的状态，否则什么也拿不到，前端应限制点击
         user_obstacle_obj = models.ReportTable.objects.filter(id=nid,status=2).first()
         return render(request,"handel_solution_obstacle.html",locals())
     else:

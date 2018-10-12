@@ -35,7 +35,7 @@ urlpatterns = [
     url('test/$', views.test),
     url('identify_code/$', views.identify_code),
     url('(?P<username>[^/]+)/(?P<option>\w+)/(?P<id>[^/]+)\.html/$', views.personal_choose_page),
-    url('(?P<username>[^/]*)/manage_edit-(?P<tag_id>\d+)-(?P<classification_id>\d+)/$', views.manage_edit),
+    url('(?P<username>[^/]*)/manage_edit-(?P<tag_id>-?\d+)-(?P<classification_id>-?\d+)/$', views.manage_edit),
     url('(?P<username>[^/]*)/manage_tag/$', backend_views.manage_tag),
     url('(?P<username>[^/]*)/manage_classification/$', backend_views.manage_classification),
     url('(?P<username>[^/]*)/manage_user_info/$', backend_views.manage_user_info),

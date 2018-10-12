@@ -3,6 +3,7 @@ from backend import views as backend_views
 from web import views
 
 urlpatterns = [
+    url('create-blog/$', views.create_blog),
     url('edit-article-(?P<nid>\d+)\.html/$', views.edit_article),
     url('edit-obstacle-(?P<nid>\d+)\.html/$', backend_views.edit_obstacle),
     url('handel-obstacle-(?P<nid>\d+)\.html/$', backend_views.handel_obstacle),

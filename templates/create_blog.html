@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/statics/plugs/bootstrap-3.3.7-dist/css/bootstrap.css">
+</head>
+<body>
+<div style="text-align: center">
+    <h2>是否开通博客?</h2>
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+        确定
+    </button>
+    <a type="button" class="btn btn-primary" data-toggle="modal">
+        取消
+    </a>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">博客信息</h4>
+            </div>
+            <div class="modal-body">
+                <input type="text" class="form-control"placeholder="博客标语" name="surfix">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="save_button">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/statics/js/jquery-3.3.1.js"></script>
+<script src="/statics/plugs/bootstrap-3.3.7-dist/js/bootstrap.js"></script>
+<script>
+    $("#save_button").click(function () {
+            $.ajax({
+            url: "/backend/create-blog/",
+            type: "post",
+            data: $(".modal-body input").serialize(),
+            success: function (arg) {
+                if (arg == "ok"){
+                    location.assign("/login/")
+                }
+                else {
+
+                }
+            }
+        })
+    })
+
+</script>
+</body>
+</html>

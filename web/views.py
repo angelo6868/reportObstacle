@@ -75,7 +75,10 @@ def login(request):
     """
     if request.session.get("is_login") == "true":
         username = request.session.get("username")
-        return redirect("/%s.html/" % username)
+        if models.BlogTable.objects.filter(user__username=username).count():
+            return redirect("/%s.html/" % username)
+        else:
+            return render(request,"create_blog.html")
     else:
         if request.method == "GET":
             # 登录验证，用form组件生成html代码
@@ -124,23 +127,45 @@ def personal_page(request):
     if request.session.get("is_login") == "true":
         # 根据传递的url拿到用户名，可以采用另外一种方式拿到用户名
         username = request.path.split(".")[0].replace("/","")
-        # 拿到标签的queryset对象
-        tag = models.Label.objects.filter(user__username=username)
-        # 拿到文章的queryset对象
-        obj = models.Article.objects.filter(user__user__username=username)
-        # 拿到分类的queryset对象
-        classification = models.Classification.objects.filter(user__username=username)
-        # 拿到该用户名的model对象，并拿到该用户关注的用户数量和粉丝数量
-        user_obj = models.UserTable.objects.filter(username=username).first()
-        care = user_obj.user_fans.filter().count()
-        fans = user_obj.user_flower.filter().count()
-        # select id,date_format(create_time,'%Y-%m') as ctime,count(id) from article group by date_format(create_time,'%Y-%m')"
-        # 在python中写sql语句注意，"%Y-%m"需要写成"%%Y-%%m"
-        ctime_list = models.Article.objects.raw('select id,date_format(create_time,"%%Y-%%m") as ctime,count(id) as c_d from article group by date_format(create_time,"%%Y-%%m")')
-        return render(request,"personpage.html",locals())
+        if models.BlogTable.objects.filter(user__username=username).count():
+            # 拿到标签的queryset对象
+            tag = models.Label.objects.filter(user__username=username)
+            # 拿到文章的queryset对象
+            obj = models.Article.objects.filter(user__user__username=username)
+            # 拿到分类的queryset对象
+            classification = models.Classification.objects.filter(user__username=username)
+            # 拿到该用户名的model对象，并拿到该用户关注的用户数量和粉丝数量
+            user_obj = models.UserTable.objects.filter(username=username).first()
+            care = user_obj.user_fans.filter().count()
+            fans = user_obj.user_flower.filter().count()
+            # select id,date_format(create_time,'%Y-%m') as ctime,count(id) from article group by date_format(create_time,'%Y-%m')"
+            # 在python中写sql语句注意，"%Y-%m"需要写成"%%Y-%%m"
+            ctime_list = models.Article.objects.raw('select id,date_format(create_time,"%%Y-%%m") as ctime,count(id) as c_d from article group by date_format(create_time,"%%Y-%%m")')
+            return render(request,"personpage.html",locals())
+        else:
+            return render(request, "create_blog.html")
     else:
         obj = VerifyBlogForm()
         return render(request,"login.html",{"obj": obj})
+
+
+def create_blog(request):
+    """
+    用户还没有博客时，无法登陆自己的个人主页，因此需要先注册自己的博客，暂时先这么设计，该函数实现博客的注册
+    :param request:
+    :return:
+    """
+    # 拿到用户名和博客的标语
+    username = request.session.get("username")
+    surfix = request.POST.get("surfix")
+    blog_obj = models.BlogTable.objects.filter(user__username=username)
+    # 检测数据库中，没有博客则创建博客
+    if not blog_obj:
+        user_obj = models.UserTable.objects.filter(username=username).first()
+        models.BlogTable.objects.create(user=user_obj,surfix=surfix)
+        return HttpResponse("ok")
+    else:
+        return HttpResponse("nook")
 
 
 def personal_choose_page(request,username,option,id):
@@ -189,18 +214,40 @@ def article_page(request,*args,**kwargs):
 
 
 def manage_edit(request,username,*args,**kwargs):
+    """
+    点击管理后，默认进入到管理文章的页面，根据分类或者标签选择自己的文章，可以对文章进行查看，删除，编辑等操作，
+    还可以创建新的文章。
+    :param request:
+    :param username:
+    :param args:
+    :param kwargs:
+    :return:
+    """
+    # url中传入的tag和classification号保存在tc_id传入到前端
     tc_id = {}
     tc_id["tag_id"] = int(kwargs["tag_id"])
     tc_id["classification_id"] = int(kwargs["classification_id"])
+    # id_lable_class中保存传入到数据库中的查询条件，为0这不需要传递该值
     id_lable_class = {}
-    if tc_id["tag_id"] != 0:
+    if tc_id["tag_id"] > 0:
         id_lable_class["label_id"] = tc_id["tag_id"]
-    if tc_id["classification_id"] != 0:
+    if tc_id["classification_id"] > 0:
         id_lable_class["classification_id"] = tc_id["classification_id"]
     user_obj = models.UserTable.objects.filter(username=username).first()
     tag = models.Label.objects.filter(user__username=username)
     classification = models.Classification.objects.filter(user__username=username)
     article_obj = models.Article.objects.filter(user__user__username=username,**id_lable_class)
+    # 增加无分类，无标签后，查询无标签，无分类的文章，无标签，无分类用-1表示
+    if tc_id["tag_id"] == -1 and tc_id["classification_id"] == -1:
+        article_obj = models.Article.objects.filter(user__user__username=username).exclude(classification_id__gt=0,
+                                                                                           label_id__gt=0)
+    elif tc_id["tag_id"] == -1:
+        article_obj = models.Article.objects.filter(user__user__username=username).exclude(
+                                                                                           label_id__gt=0)
+    elif tc_id["classification_id"] == -1:
+        article_obj = models.Article.objects.filter(user__user__username=username).exclude(
+            classification_id__gt=0)
+    # 这儿为分页的使用
     current_page = 1
     total_number = article_obj.count()
     page_obj = pager.Pagination(total_number,current_page,13,5)
@@ -308,15 +355,23 @@ def upload_pictures(request,*args,**kwargs):
 
 
 def edit_article(request,nid,*args,**kwargs):
+    """
+    对文章进行编辑
+    :param request:
+    :param nid:
+    :param args:
+    :param kwargs:
+    :return:
+    """
+    username = request.session.get("username")
     if request.method == "GET":
         article_obj = models.Article.objects.filter(id=nid).first()
-        tag = models.Label.objects.all()
-        classification = models.Classification.objects.all()
+        tag = models.Label.objects.filter(user__username=username)
+        classification = models.Classification.objects.filter(user__username=username)
         return render(request,"edit_article.html",locals())
     else:
         print(request.POST.get("article_title"))
         print(request.POST.get("article_content"))
-        username = request.session.get("username")
         article_title = request.POST.get("article_title")
         article_content = request.POST.get("article_content")
         tag_id = request.POST.get("inlineRadioOptions1")
